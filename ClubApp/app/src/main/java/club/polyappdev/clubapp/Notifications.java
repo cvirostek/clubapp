@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.TextView;
 
 
 /**
@@ -28,6 +30,9 @@ public class Notifications extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    String list_items[] = {"a", "b", "c", "d", "e"};
+    ListView listView;
 
     public Notifications() {
         // Required empty public constructor
@@ -58,13 +63,21 @@ public class Notifications extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_notifications, container, false);
+        View view = inflater.inflate(R.layout.fragment_notifications, container, false);
+
+        listView = (ListView) view.findViewById(R.id.listView);
+        NotificationListAdapter customAdapter = new NotificationListAdapter(getActivity().getApplicationContext(), list_items);
+        listView.setAdapter(customAdapter);
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -83,6 +96,7 @@ public class Notifications extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+
     }
 
     @Override
