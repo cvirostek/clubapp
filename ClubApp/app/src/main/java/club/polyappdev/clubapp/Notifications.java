@@ -10,6 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.Date;
+
+import club.polyappdev.clubapp.Models.Club;
+import club.polyappdev.clubapp.Models.Event;
+import club.polyappdev.clubapp.Models.Notification;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,7 +37,7 @@ public class Notifications extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    String list_items[] = {"a", "b", "c", "d", "e"};
+    Notification[] notification_list = new Notification[20];
     ListView listView;
 
     public Notifications() {
@@ -73,11 +79,30 @@ public class Notifications extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
 
+        createList();
+
         listView = (ListView) view.findViewById(R.id.listView);
-        NotificationListAdapter customAdapter = new NotificationListAdapter(getActivity().getApplicationContext(), list_items);
+        NotificationListAdapter customAdapter = new NotificationListAdapter(getActivity().getApplicationContext(), notification_list);
         listView.setAdapter(customAdapter);
 
         return view;
+    }
+
+    public void createList() {
+        Club[] clubList = new Club[notification_list.length];
+        Event[] eventList = new Event[notification_list.length];
+        for (int i = 0; i < notification_list.length; i++) {
+            notification_list[i] = new Notification();
+            clubList[i] = new Club();
+            eventList[i] = new Event();
+            clubList[i].setName("Club #" + i);
+            eventList[i].setTitle("Event #" + i);
+            notification_list[i].setClub(clubList[i]);
+            notification_list[i].setDate(new Date(i*1000000));
+            notification_list[i].setContent("Description #" + i);
+            notification_list[i].setEvent(eventList[i]);
+        }
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

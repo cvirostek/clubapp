@@ -10,24 +10,23 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
+import club.polyappdev.clubapp.Models.Notification;
 
 public class NotificationListAdapter extends BaseAdapter {
     Context context;
-    String list_items[];
+    Notification[] notification_list;
     LayoutInflater inflter;
 
-    public NotificationListAdapter(Context applicationContext, String[] animals) {
+    public NotificationListAdapter(Context applicationContext, Notification[] notification_list) {
         this.context = applicationContext;
-        this.list_items = animals;
+        this.notification_list = notification_list;
         inflter = (LayoutInflater.from(applicationContext));
     }
 
     @Override
     public int getCount() {
-        return list_items.length;
+        return notification_list.length;
     }
 
     @Override
@@ -44,10 +43,18 @@ public class NotificationListAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.notifications_listview, viewGroup, false);
 
-        //ImageView icon = (ImageView) view.findViewById(R.id.icon);
-        TextView text = (TextView) view.findViewById(R.id.textView);
-        //icon.setImageResource(animals[i]);
-        text.setText(list_items[i]);
+        TextView eventClub = (TextView) view.findViewById(R.id.eventClub);
+        eventClub.setText(notification_list[i].getClub().getName());
+
+        TextView eventTitle = (TextView) view.findViewById(R.id.eventTitle);
+        eventTitle.setText(notification_list[i].getEvent().getTitle());
+
+        TextView eventDate = (TextView) view.findViewById(R.id.eventDate);
+        eventDate.setText(notification_list[i].getDate().toString());
+
+        TextView eventDescription = (TextView) view.findViewById(R.id.eventDescription);
+        eventDescription.setText(notification_list[i].getContent());
+
         return view;
     }
 }
