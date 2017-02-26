@@ -1,18 +1,13 @@
 package club.polyappdev.clubapp;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import java.util.Date;
@@ -74,7 +69,7 @@ public class Notifications extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        setHasOptionsMenu(true);
+
 
     }
 
@@ -103,7 +98,7 @@ public class Notifications extends Fragment {
             clubList[i].setName("Club #" + i);
             eventList[i].setTitle("Event #" + i);
             notification_list[i].setClub(clubList[i]);
-            notification_list[i].setDate(new Date(i*100000000));
+            notification_list[i].setDate(new Date(i*1000000));
             notification_list[i].setContent("Description #" + i);
             notification_list[i].setEvent(eventList[i]);
         }
