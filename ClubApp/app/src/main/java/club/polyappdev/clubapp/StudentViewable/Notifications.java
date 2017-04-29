@@ -1,15 +1,21 @@
 package club.polyappdev.clubapp.StudentViewable;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.Date;
 
@@ -18,6 +24,7 @@ import club.polyappdev.clubapp.Models.Club;
 import club.polyappdev.clubapp.Models.Event;
 import club.polyappdev.clubapp.Models.Notification;
 import club.polyappdev.clubapp.R;
+import club.polyappdev.clubapp.NotificationPublisher;
 
 
 /**
@@ -94,7 +101,6 @@ public class Notifications extends Fragment {
 
                 Event clickedEvent = ((Notification)parent.getAdapter().getItem(position)).getEvent();
 
-
                 Intent eventIntent = new Intent(getContext(),events.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("eventName", clickedEvent.getTitle()); //serializable?
@@ -105,6 +111,16 @@ public class Notifications extends Fragment {
                 eventIntent.putExtras(bundle);
 
                 startActivity(eventIntent);
+            }
+        });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                Event clickedEvent = ((Notification)adapterView.getAdapter().getItem(i)).getEvent();
+                scheduleNotification(getContext(), 5000, i, clickedEvent);
+                return true;
             }
         });
 
@@ -170,5 +186,50 @@ public class Notifications extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void scheduleNotification(Context context, long delay, int notificationId, Event event) {//delay is after how much time(in millis) from current time you want to schedule the notification
+        if (checkNotificationExists(context, notificationId)) {
+            Toast.makeText(getActivity(), "Canceled notification " + notificationId, Toast.LENGTH_LONG).show();
+            cancelNotification(context, notificationId);
+            return;
+        }
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                .setContentTitle(event.getClub().getName() + " Event")
+                .setContentText(event.getDescription())
+                .setAutoCancel(true)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+        Intent intent = new Intent(context, MainActivity.class);
+        PendingIntent activity = PendingIntent.getActivity(context, notificationId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        builder.setContentIntent(activity);
+
+        android.app.Notification notification = builder.build();
+
+        Intent notificationIntent = new Intent(context, NotificationPublisher.class);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, notificationId);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+        Toast.makeText(getActivity(), "Scheduled notification " + notificationId, Toast.LENGTH_LONG).show();
+    }
+
+    public boolean checkNotificationExists(Context context, int notificationId) {
+        Intent notificationIntent = new Intent(context, NotificationPublisher.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, notificationIntent, PendingIntent.FLAG_NO_CREATE);
+        return pendingIntent != null;
+    }
+
+    public void cancelNotification(Context context, int notificationId) {
+        Intent notificationIntent = new Intent(context, NotificationPublisher.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, notificationIntent, PendingIntent.FLAG_NO_CREATE);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+        pendingIntent.cancel();
     }
 }

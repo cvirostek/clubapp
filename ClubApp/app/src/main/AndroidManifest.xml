@@ -33,6 +33,7 @@
             android:name=".ClubProfileActivity"
             android:label="@string/title_activity_club_profile"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <receiver android:name=".NotificationPublisher" />
     </application>
 
 </manifest>
