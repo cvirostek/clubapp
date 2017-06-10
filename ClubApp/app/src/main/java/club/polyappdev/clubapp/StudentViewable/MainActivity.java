@@ -4,23 +4,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +19,8 @@ import club.polyappdev.clubapp.AllViewable.LoginActivity;
 import club.polyappdev.clubapp.MySetting;
 import club.polyappdev.clubapp.R;
 
-import static android.R.attr.fragment;
-
 public class MainActivity extends AppCompatActivity implements
-        General.OnFragmentInteractionListener,
+        //General.OnFragmentInteractionListener,
         Notifications.OnFragmentInteractionListener,
         Profile.OnFragmentInteractionListener,
         Subscribed.OnFragmentInteractionListener {
@@ -54,15 +42,12 @@ public class MainActivity extends AppCompatActivity implements
      * The {@link ViewPager} that will host the section contents.
      */
 //    private ViewPager mViewPager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        mBottomNavigationView = (BottomNavigationView) findViewById(R.id.BottomNav) ;
-        setSupportActionBar(toolbar);
+        mBottomNavigationView = (BottomNavigationView) findViewById(R.id.BottomNav);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
 //        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -101,19 +86,19 @@ public class MainActivity extends AppCompatActivity implements
                 .beginTransaction()
                 .replace(R.id.FragmentViewer, mFragmentList.get(pos))
                 .commit();
+        setTitle(mBottomNavigationView.getMenu().getItem(pos).getTitle());
     }
 
-    private void createFragments(){
+    private void createFragments() {
         Fragment sub = new Subscribed();
         Fragment notif = new Notifications();
         Fragment prof = new Profile();
-        Fragment general = new General();
+        Fragment general = new MapFragment();
         mFragmentList.add(sub);
         mFragmentList.add(notif);
         mFragmentList.add(general);
         mFragmentList.add(prof);
     }
-
 
 
     @Override
@@ -136,14 +121,8 @@ public class MainActivity extends AppCompatActivity implements
             startActivity(intent2);
         }
         //4.22.2017 modify logout to clear stack and log out of account from firebase - Jacky Huang
-        if (id == R.id.action_logout){
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            Toast toast;
-            toast = Toast.makeText(this, "You have been \"logged out\"", Toast.LENGTH_SHORT);
-            toast.show();
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            FirebaseAuth.getInstance().signOut();
-            startActivity(intent);
+        if (id == R.id.action_logout) {
+            startActivity(LoginActivity.getLogOutIntent(this));
         }
 
         return super.onOptionsItemSelected(item);
@@ -153,86 +132,4 @@ public class MainActivity extends AppCompatActivity implements
     public void onFragmentInteraction(Uri uri) {
 
     }
-//
-//    /**
-//     * A placeholder fragment containing a simple view.
-//     */
-//    public static class PlaceholderFragment extends Fragment {
-//        /**
-//         * The fragment argument representing the section number for this
-//         * fragment.
-//         */
-//        private static final String ARG_SECTION_NUMBER = "section_number";
-//
-//        public PlaceholderFragment() {
-//        }
-//
-//        /**
-//         * Returns a new instance of this fragment for the given section
-//         * number.
-//         */
-//        public static Fragment newInstance(int sectionNumber) {
-//
-//            if (sectionNumber == 1) {
-//                return new Subscribed();
-//            }
-//            else if (sectionNumber == 2) {
-//                return new Notifications();
-//            }
-//            else if (sectionNumber == 3) {
-//                return new General();
-//            }
-//            else if (sectionNumber == 4) {
-//                return new Profile();
-//            }
-//            else {
-//                return new Subscribed();
-//            }
-//        }
-//
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                                 Bundle savedInstanceState) {
-//            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-//            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-//            return rootView;
-//        }
-//    }
-//
-//    /**
-//     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-//     * one of the sections/tabs/pages.
-//     */
-//    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-//
-//        public SectionsPagerAdapter(FragmentManager fm) {
-//            super(fm);
-//        }
-//
-//        @Override
-//        public Fragment getItem(int position) {
-//            // getItem is called to instantiate the fragment for the given page.
-//            // Return a PlaceholderFragment (defined as a static inner class below).
-//            return PlaceholderFragment.newInstance(position + 1);
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            // Show 3 total pages.
-//            return 4;
-//        }
-//
-//        @Override
-//        public CharSequence getPageTitle(int position) {
-//            switch (position) {
-//                case 0:
-//                    return "SECTION 1";
-//                case 1:
-//                    return "SECTION 2";
-//                case 2:
-//                    return "SECTION 3";
-//            }
-//            return null;
-//        }
-//    }
 }

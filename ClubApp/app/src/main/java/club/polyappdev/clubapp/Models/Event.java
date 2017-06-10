@@ -9,12 +9,14 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import club.polyappdev.clubapp.EasierDate;
+
 /**
  * Created by Kris Campos on 1/28/17.
  */
 public class Event {
     private Location location;
-    private Date date; // Tommy said it includes time in the millisecond "said google"
+    private EasierDate date; // Tommy said it includes time in the millisecond "said google"
     private String description;
     private String stringLoc;
     private String stringDate;
@@ -29,6 +31,10 @@ public class Event {
     public void setClub(Club club) {
         this.club = club;
         this.clubName = club.getName();// so I can parcel it
+    }
+
+    public String getClubName() {
+        return clubName;
     }
 
     public String getStringLoc() {
@@ -52,11 +58,11 @@ public class Event {
         this.location = location;
     }
 
-    public Date getDate() {
+    public EasierDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(EasierDate date) {
         this.date = date;
     }
 

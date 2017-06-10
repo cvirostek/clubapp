@@ -10,6 +10,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+<<<<<<< HEAD
 
         <TextView
             android:text="My Notifications"
@@ -20,6 +21,8 @@
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
             android:gravity="center_horizontal" />
+=======
+>>>>>>> CalPolyAppDevClub/master
 
         <ListView
             android:layout_width="match_parent"

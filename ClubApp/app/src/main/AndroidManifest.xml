@@ -3,19 +3,26 @@
     package="club.polyappdev.clubapp">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <!-- android:theme="@style/AppTheme.NoActionBar" -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
-    <!-- android:theme="@style/AppTheme.NoActionBar"-->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBUe_qAIE_B11dcXh21CgS5FBdAfdpZVDE" />
         <activity
             android:name=".StudentViewable.MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".AllViewable.events" />
+            android:label="@string/app_name"/>
+        <activity android:name=".AllViewable.EventDetailActivity" />
         <activity android:name=".AllViewable.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,25 +30,29 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AllViewable.RegistrationActivity">
-        </activity>
-        <activity android:name=".ClubViewable.ClubMainActivity"></activity>
+        <activity android:name=".AllViewable.RegistrationActivity"
+                  android:label="Sign Up"
+            android:parentActivityName=".AllViewable.LoginActivity"/>
+        <activity android:name=".ClubViewable.ClubMainActivity" />
         <activity
-            android:name="MySetting"
-            android:label="@string/title_my_settings">
-        </activity>
-        <activity
-            android:name=".EditProfile">
-        </activity>
+            android:name=".MySetting"
+            android:label="@string/title_my_settings"
+            android:parentActivityName=".StudentViewable.MainActivity"/>
+        <activity android:name=".EditProfile"
+            android:parentActivityName=".MySetting"/>
         <activity
             android:name=".Pop"
-            android:theme = "@style/AppTheme.PopupPassword">
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
         <activity
             android:name=".ClubProfileActivity"
+            android:parentActivityName=".StudentViewable.MainActivity"
             android:label="@string/title_activity_club_profile"
+<<<<<<< HEAD
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <receiver android:name=".NotificationPublisher" />
+=======
+            android:theme="@style/AppTheme.NoActionBar" />
+>>>>>>> CalPolyAppDevClub/master
     </application>
 
 </manifest>

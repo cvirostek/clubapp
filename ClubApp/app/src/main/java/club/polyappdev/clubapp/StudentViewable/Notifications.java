@@ -19,7 +19,8 @@ import android.widget.Toast;
 
 import java.util.Date;
 
-import club.polyappdev.clubapp.AllViewable.events;
+import club.polyappdev.clubapp.AllViewable.EventDetailActivity;
+import club.polyappdev.clubapp.EasierDate;
 import club.polyappdev.clubapp.Models.Club;
 import club.polyappdev.clubapp.Models.Event;
 import club.polyappdev.clubapp.Models.Notification;
@@ -31,7 +32,7 @@ import club.polyappdev.clubapp.NotificationPublisher;
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * {@link Notifications.OnFragmentInteractionListener} interface
- * to handle interaction events.
+ * to handle interaction EventDetailActivity.
  * Use the {@link Notifications#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -101,12 +102,17 @@ public class Notifications extends Fragment {
 
                 Event clickedEvent = ((Notification)parent.getAdapter().getItem(position)).getEvent();
 
+<<<<<<< HEAD
                 Intent eventIntent = new Intent(getContext(),events.class);
+=======
+
+                Intent eventIntent = new Intent(getContext(),EventDetailActivity.class);
+>>>>>>> CalPolyAppDevClub/master
                 Bundle bundle = new Bundle();
                 bundle.putString("eventName", clickedEvent.getTitle()); //serializable?
                 bundle.putString("eventDesc", clickedEvent.getDescription());
                 bundle.putString("eventStrLoc", clickedEvent.getStringLoc());
-                bundle.putLong("eventDate", clickedEvent.getDate().getTime());
+                bundle.putString("eventDate", clickedEvent.getDate().toString());
                 bundle.putString("eventClub", clickedEvent.getClub().getName());
                 eventIntent.putExtras(bundle);
 
@@ -138,10 +144,9 @@ public class Notifications extends Fragment {
             tempEvent.setTitle("Event Name " + i);
             tempEvent.setDescription("Description " + i);
             tempEvent.setStringLoc("Building " + i);
-            tempEvent.setDate(new Date(i*1000000));
+            tempEvent.setDate(new EasierDate(2017,1,i+1,i,0));
             tempEvent.setClub(tempClub);
             notification_list[i].setClub(tempClub);
-            notification_list[i].setDate(new Date(i*1000000));
             notification_list[i].setContent("Description " + i);
             notification_list[i].setEvent(tempEvent);
         }
